@@ -27,6 +27,8 @@ now using [SSRSpeed](https://github.com/NyanChanMeow/SSRSpeed) as testing core
 
 - [x] use scheduler to test url automatically
 
+- [ ] add ss/ssr switch function
+
 - [ ] send result to bot
 
 ## Alert
