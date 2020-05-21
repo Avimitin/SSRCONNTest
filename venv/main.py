@@ -14,7 +14,7 @@ def main():
     global sub
     if not os.path.exists('sub_link.json'):
         print('+-------------------------+')
-        sub_type = input('选择你的链接类型(SSR/SS)：').upper()
+        sub_type = input('选择你的链接类型(SSR/-SS-,SS is not available yet)：').upper()
         sub_link = input('输入你的订阅链接：')
         print('+-------------------------+')
         sub = {sub_type: sub_link}
