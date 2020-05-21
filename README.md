@@ -31,6 +31,23 @@ now using [SSRSpeed](https://github.com/NyanChanMeow/SSRSpeed) as testing core
 
 - [ ] send result to bot
 
+## Usage
+
+```bash
+git clone https://github.com/Avimitin/SSRCONNTest.git
+
+wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip
+
+cp SSRSpeed-2.6.4 ./SSRCONNTest
+
+cd SSRCONNTest
+
+pip3 install -r requirement.txt
+
+python ./venv/main.py
+```
+
+
 ## Alert
 
 This project may occupy ssr link count. Some proxy service provider may not allow too many connection count.
