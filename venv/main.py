@@ -1,6 +1,6 @@
 # author: avimitin
 # date: 2020.5.21
-# encoding: utf-8
+# -*- coding: utf-8 -*
 import subprocess
 import os
 from apscheduler.schedulers.background import BlockingScheduler
