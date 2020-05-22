@@ -14,10 +14,10 @@ sub = None
 def main():
     global sub
     if not os.path.exists('sub_link.json'):
-        print('+-------------------------+')
+        print('+-----------------------------------------+')
         sub_type = input('选择你的链接类型(SSR)：').upper()
         sub_link = input('输入你的订阅链接：')
-        print('+-------------------------+')
+        print('+-----------------------------------------+')
         sub = {sub_type: sub_link}
         with open('sub_link.json', 'w+', encoding='UTF-8') as sub_file:
             json.dump(sub, sub_file)
@@ -41,8 +41,8 @@ if __name__ == '__main__':
     main()
     scheduler = BlockingScheduler()
     scheduler.add_job(test, 'interval', hours=3)
-    scheduler.start()
     print('+-------------------------+')
     print(' Program Start Schduling Now ')
     print('+-------------------------+')
+    scheduler.start()
     
