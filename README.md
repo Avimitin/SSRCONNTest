@@ -13,11 +13,11 @@ server in one click.
 
 ~~- [ ] use g-static to test proxy connection~~
 
-~~- [ ] test proxy automatically~~
+- [x] test proxy automatically
 
 ~~- [ ] record proxy status and make a form monthly~~
 
-~~- [ ] use Telegram Bot to send proxy information~~
+- [ ] use Telegram Bot to send proxy information
 
 ---
 
@@ -27,9 +27,9 @@ now using [SSRSpeed](https://github.com/NyanChanMeow/SSRSpeed) as testing core
 
 - [x] use scheduler to test url automatically
 
-- [ ] add ss/ssr switch function
+~~- [ ] add ss/ssr switch function~~
 
-- [ ] send result to bot
+- [x] send result to server
 
 ## Usage
 
@@ -37,6 +37,8 @@ now using [SSRSpeed](https://github.com/NyanChanMeow/SSRSpeed) as testing core
 git clone https://github.com/Avimitin/SSRCONNTest.git
 
 wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip
+
+unzip 2.6.4.zip
 
 cp SSRSpeed-2.6.4 ./SSRCONNTest
 
