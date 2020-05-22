@@ -33,9 +33,6 @@ def test():
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
     shell = r'python ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
-    print('+-------------------------+')
-    print('program start schduler now')
-    print('+-------------------------+')
     subprocess.run(shell, shell=True)
 
 
@@ -44,5 +41,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
     scheduler.add_job(test, 'interval', hours=3)
     scheduler.start()
-
+    print('+-------------------------+')
+    print(' Program Start Schduling Now ')
+    print('+-------------------------+')
     
