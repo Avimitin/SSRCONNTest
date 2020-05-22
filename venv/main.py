@@ -3,7 +3,7 @@
 # encoding: utf-8
 import subprocess
 import os
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.background import BlockingScheduler
 import json
 
 
@@ -33,12 +33,15 @@ def test():
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
     shell = r'python ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
+    print('+-------------------------+')
+    print('program start schduler now')
+    print('+-------------------------+')
     subprocess.run(shell, shell=True)
 
 
 if __name__ == '__main__':
     main()
-    scheduler = BackgroundScheduler()
+    scheduler = BlockingScheduler()
     scheduler.add_job(test, 'interval', hours=3)
     scheduler.start()
 
