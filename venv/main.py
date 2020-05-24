@@ -33,7 +33,7 @@ def test():
         os.chdir('./SSRSpeed-2.6.4')
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
-    shell = r'python ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
+    shell = r'python3 ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
     subprocess.run(shell, shell=True)
 
 
