@@ -37,7 +37,7 @@ def main():
             return
     elif str(os.getcwd()) == '/root':
         try:
-            os.chdir('~/SSRCONNTest/SSRSpeed-2.6.4')
+            os.chdir('/root/SSRCONNTest/SSRSpeed-2.6.4')
         except FileNotFoundError:
             print('+-----------------------------------------------------------------+')
             print('您尚未安装SSRSpeed，或SSRCONNTest不在根目录下,请将项目放至根目录下或执行以下命令:')
