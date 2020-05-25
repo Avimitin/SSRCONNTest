@@ -35,6 +35,17 @@ def main():
             print('cp SSRSpeed-2.6.4 ./SSRCONNTest')
             print('+-----------------------------------------------------------------+')
             return
+    elif '~' in str(os.getcwd()):
+        try:
+            os.chdir('~/SSRCONNTest/SSRSpeed-2.6.4')
+        except FileNotFoundError:
+            print('+-----------------------------------------------------------------+')
+            print('您尚未安装SSRSpeed，或SSRCONNTest不在根目录下,请将项目放至根目录下或执行以下命令:')
+            print('wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip')
+            print('unzip 2.6.4.zip')
+            print('cp SSRSpeed-2.6.4 ./SSRCONNTest')
+            print('+-----------------------------------------------------------------+')
+            return
     else:
         try:
             os.chdir('./SSRSpeed-2.6.4')
