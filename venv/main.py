@@ -4,7 +4,6 @@
 # date: 2020.5.21
 import subprocess
 import os
-from apscheduler.schedulers.background import BlockingScheduler
 import json
 
 
@@ -25,12 +24,46 @@ def main():
         with open('sub_link.json', 'r+', encoding='UTF-8') as sub_file:
             sub = json.load(sub_file)
 
+    if 'venv' in str(os.getcwd()):
+        try:
+            os.chdir('../SSRSpeed-2.6.4')
+        except FileNotFoundError:
+            print('+-----------------------------------------------------------------+')
+            print('您尚未安装SSRSpeed，请执行以下命令:')
+            print('wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip')
+            print('unzip 2.6.4.zip')
+            print('cp SSRSpeed-2.6.4 ./SSRCONNTest')
+            print('+-----------------------------------------------------------------+')
+            return
+    else:
+        try:
+            os.chdir('./SSRSpeed-2.6.4')
+        except FileNotFoundError:
+            print('+-----------------------------------------------------------------+')
+            print('您尚未安装SSRSpeed，请执行以下命令:')
+            print('wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip')
+            print('unzip 2.6.4.zip')
+            print('cp SSRSpeed-2.6.4 ./SSRCONNTest')
+            print('+-----------------------------------------------------------------+')
+            return
+
+    print(os.getcwd())
+
+    with open('main.py', 'r+', encoding='UTF-8') as file:
+        lines = file.readlines()
+        for x in lines:
+            if 'input("Press' in lines:
+                with open('main.py', 'w+', encoding='UTF-8') as new_file:
+                    for x in lines:
+                        if 'input("Press' in lines:
+                            continue
+                        else:
+                            file.writelines(x)
+            else:
+                continue
+
 
 def test():
-    if 'venv' in str(os.getcwd()):
-        os.chdir('../SSRSpeed-2.6.4')
-    else:
-        os.chdir('./SSRSpeed-2.6.4')
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
     shell = r'python3 ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
@@ -39,10 +72,5 @@ def test():
 
 if __name__ == '__main__':
     main()
-    scheduler = BlockingScheduler()
-    scheduler.add_job(test, 'interval', hours=3)
-    print('+-------------------------+')
-    print(' Program Start Schduling Now ')
-    print('+-------------------------+')
-    scheduler.start()
+    test()
     
