@@ -35,7 +35,7 @@ def main():
             print('cp SSRSpeed-2.6.4 ./SSRCONNTest')
             print('+-----------------------------------------------------------------+')
             return
-    elif str(os.getcwd()) == 'root':
+    elif str(os.getcwd()) == '/root':
         try:
             os.chdir('~/SSRCONNTest/SSRSpeed-2.6.4')
         except FileNotFoundError:
