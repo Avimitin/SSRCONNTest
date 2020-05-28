@@ -78,7 +78,7 @@ def test():
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
     shell = r'python3 ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
-    subprocess.run(shell, shell=True)
+    os.system(shell)
 
 
 if __name__ == '__main__':
