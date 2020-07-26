@@ -10,15 +10,16 @@ import zipfile
 
 
 def main():
+    # 测试是否有测速主程序
     try_speedtest()
-
+    # 获取订阅链接
     sub = get_sub_link()
-    
+    # 进入测速程序目录
     os.chdir("./SSRSpeed-2.6.4")
-    print(os.getcwd())
+    # print(os.getcwd())
     # ss_url = 'https://sub.O-Proxy.com/xxx'
     ssr_url = sub['SSR']
-    shell = 'python ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
+    shell = 'python3 ./main.py -M "pingonly" --exclude "官网" --exclude "如果发现" --yes -u %s' % ssr_url
     os.system(shell)
 
 
