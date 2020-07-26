@@ -2,8 +2,7 @@
 
 ## Intro
 
-In order to manage all my SSR proxy server, this project is designed to test all the 
-server in one click.
+In order to manage all my SSR proxy server, this project is designed for testing all the server in one commands.
 
 ## Todo
 
@@ -36,19 +35,10 @@ now using [SSRSpeed](https://github.com/NyanChanMeow/SSRSpeed) as testing core
 ```bash
 git clone https://github.com/Avimitin/SSRCONNTest.git
 
-wget https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip
-
-unzip 2.6.4.zip
-
-cp SSRSpeed-2.6.4 ./SSRCONNTest
-
-cd SSRCONNTest
-
 pip3 install -r requirement.txt
 
-python ./venv/main.py
+python ./main.py
 ```
-
 
 ## Alert
 
