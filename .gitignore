@@ -1,8 +1,5 @@
 SSRSpeed-2.6.4
-venv/Include
-venv/Lib
-venv/Scripts
-venv/pyvenv.cfg
-venv/sub_link.json
-venv/tran_sub.py
+venv
+resource
+.vscode
 .idea
