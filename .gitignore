@@ -1,6 +1,9 @@
-SSRSpeed-2.6.4
+SSRSpeed
 venv
 resource
 config
 .vscode
 .idea
+web/config
+web/test
+__pycache__
