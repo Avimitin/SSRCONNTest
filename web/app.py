@@ -17,8 +17,18 @@ def task_handler():
     if request.json is None or "token" not in request.json:
         return make_response(jsonify(APIRETURN.EMPTY), 200)
     elif request.json["token"] == TOKEN:
-        print(request.args)
-        return make_response(jsonify({"OK": True}), 200)
+        name = request.args.get("name")
+        time = request.args.get("time")
+        r = ResultHandler.ResultHandler()
+        if name and time:
+            result = r.get_result_by_keyword(name=name, time=time)
+        elif name:
+            result = r.get_result_by_keyword(name=name)
+        elif time:
+            result = r.get_result_by_keyword(time=time)
+        else:
+            return make_response(jsonify(APIRETURN.EMPTY_ARGS_GUIDE), 400)
+        return make_response(jsonify(result), 200)
 
 
 @app.errorhandler(404)
