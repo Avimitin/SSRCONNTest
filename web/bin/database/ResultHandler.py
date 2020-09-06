@@ -44,7 +44,7 @@ class ResultHandler:
             Result is a list that contain many dict object about data.
             For Example:
                 >> test = ResultHandler()
-                >> print(test.get_result_by_keyword("test"))
+                >> print(test.get_result_by_keyword(name="test"))
                 [{'ID': 1, 'NAME': 'test', 'PLACE': 'F:/dev', 'TIME': 114514}]
             If the result doesn't exist, this will return a empty list.
         """
