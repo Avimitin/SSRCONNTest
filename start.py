@@ -88,7 +88,8 @@ def main(debug=False):
     import web.bin.database.ResultHandler as Result
     r = Result.ResultHandler()
     r.add_new_result(opt.name, filename, unixTime)
-    print(r.get_result_by_keyword(time=unixTime))
+    result = r.get_result_by_keyword(time=unixTime)
+    return result
 
 
 def get_sub_link():
