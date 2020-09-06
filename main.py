@@ -5,13 +5,15 @@
 import sys
 import os
 import json
-import wget
 import zipfile
 import platform
+import time
+from web.bin.database.ResultHandler import ResultHandler
 
 
 class OPT:
     def __init__(self,
+                 name,
                  paolu=False,
                  debug=False,
                  test_method=None,
@@ -32,6 +34,7 @@ class OPT:
                  use_ssr_CSharp=False,
                  skip_requirements_check=True
                  ):
+        self.name = name
         self.paolu = paolu
         self.debug = debug
         self.test_method = test_method
@@ -53,12 +56,14 @@ class OPT:
         self.skip_requirements_check = skip_requirements_check
 
 
-def main():
-    if "Linux" not in platform.platform():
+def main(debug=False):
+    if not debug and "Linux" not in platform.platform():
         print("暂时不支持除了 Linux 以外的平台")
-        return 
+        return
+
     # 测试是否有测速主程序
-    try_speedtest()
+    find_speed_test()
+
     # 获取订阅链接
     sub = get_sub_link()
     ssr_url = sub['SSR']
@@ -71,13 +76,18 @@ def main():
     os.system(shell)
     '''
 
-    opt = OPT(test_mode="pingonly", egfilter=["官网", "如果发现"], confirmation=True, url=ssr_url)
+    opt = OPT(name="OxygenProxy", test_mode="pingonly", egfilter=["官网", "如果发现"], filter=["深港专线"], confirmation=True, url=ssr_url)
 
-    sys.path.append(os.getcwd()+r"/SSRSpeed")
+    sys.path.append(os.getcwd()+r"\SSRSpeed")
+    print(sys.path)
     os.chdir("SSRSpeed")
 
     from SSRSpeed import main
-    main.start(opt)
+    filename, pTime = main.start(opt)
+    unixTime = time.mktime(time.strptime(pTime, "%Y-%m-%d-%H-%M-%S"))
+    r = ResultHandler()
+    r.add_new_result(opt.name, filename, unixTime)
+    print(r.get_result_by_keyword(time=unixTime))
 
 
 def get_sub_link():
@@ -107,7 +117,7 @@ def alert():
 '''
 
 
-def try_speedtest():
+def find_speed_test():
     is_exist = False
 
     for file in os.listdir('./'):
@@ -116,23 +126,19 @@ def try_speedtest():
         else:
             pass
 
-    if is_exist == False:
-        print("没有找到SpeedTest，下载中...\n")
-        wget.download("https://github.com/NyanChanMeow/SSRSpeed/archive/2.6.4.zip")
-        print("下载完成，正在解压...\n")
-        files = zipfile.ZipFile("./SSRSpeed-2.6.4.zip", "r")
+    if not is_exist:
+        print("没有找到SpeedTest，解压中...\n")
+        files = zipfile.ZipFile("resource/SSRSpeed.zip", "r")
         for file_name in files.namelist():
             files.extract(file_name, "./")
         files.close()
-        print("解压完成，正在清理...\n")
-        os.remove("./SSRSpeed-2.6.4.zip")
-        modify_file()
-        print("清理完成")
+        print("解压完成")
     else:
         print("找到SSRSpeed，进行下一步")
         return
 
 
+'''
 def modify_file():
     is_exist = False
 
@@ -154,7 +160,7 @@ def modify_file():
             else:
                 new_file.writelines(line)
         print("修改完成")
-
+'''
 
 if __name__ == '__main__':
-    main()
+    main(debug=True)
