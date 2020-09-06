@@ -20,7 +20,8 @@ class DBConnect:
         return self.database
 
     def get_cur(self):
-        return self.database.cursor()
+        self.cur = self.database.cursor()
+        return self.cur
 
     def close_connect(self, curIsOpen=False):
         if curIsOpen:
