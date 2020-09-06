@@ -2,7 +2,7 @@
 
 ## TODO
 
-- [ ] 实现 `Restful API` 规范的API
+- [x] 实现 `Restful API` 规范的API
 - [ ] 实现文件接发
 - [ ] 实现异步和并发
 - [ ] 实现 `Long Polling`
