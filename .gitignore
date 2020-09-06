@@ -1,6 +1,6 @@
 SSRSpeed
 venv
-config
+configs
 .vscode
 .idea
 web/config
