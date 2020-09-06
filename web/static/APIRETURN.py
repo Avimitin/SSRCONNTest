@@ -24,3 +24,10 @@ INVALID = {
 EMPTY = {
     "error": "EMPTY JSON REQUEST"
 }
+
+EMPTY_ARGS_GUIDE = {
+    "ok": False,
+    "error_code": 400,
+    "description": "YOUR SEARCHING ARGS ARE EMPTY, YOU MUST INPUT SEARCHING ARGS LIKE: "
+                   "https://example.com/api/v1/result?time=114514 "
+}
