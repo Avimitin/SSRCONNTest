@@ -8,7 +8,6 @@ import json
 import zipfile
 import platform
 import time
-from web.bin.database.ResultHandler import ResultHandler
 
 
 class OPT:
@@ -78,29 +77,31 @@ def main(debug=False):
 
     opt = OPT(name="OxygenProxy", test_mode="pingonly", egfilter=["官网", "如果发现"], filter=["深港专线"], confirmation=True, url=ssr_url)
 
-    sys.path.append(os.getcwd()+r"\SSRSpeed")
+    sys.path.extend(["SSRSpeed", "web"])
     print(sys.path)
     os.chdir("SSRSpeed")
 
     from SSRSpeed import main
     filename, pTime = main.start(opt)
     unixTime = time.mktime(time.strptime(pTime, "%Y-%m-%d-%H-%M-%S"))
-    r = ResultHandler()
+
+    from web.bin.database import ResultHandler
+    r = ResultHandler.ResultHandler()
     r.add_new_result(opt.name, filename, unixTime)
     print(r.get_result_by_keyword(time=unixTime))
 
 
 def get_sub_link():
-    if not os.path.exists('config/sub_link.json'):
+    if not os.path.exists('configs/sub_link.json'):
         print('+-----------------------------------------+')
         sub_type = input('选择你的链接类型(SSR)：').upper()
         sub_link = input('输入你的订阅链接：')
         print('+-----------------------------------------+')
         sub = {sub_type: sub_link}
-        with open('config/sub_link.json', 'w+', encoding='UTF-8') as sub_file:
+        with open('configs/sub_link.json', 'w+', encoding='UTF-8') as sub_file:
             json.dump(sub, sub_file)
     else:
-        with open('config/sub_link.json', 'r+', encoding='UTF-8') as sub_file:
+        with open('configs/sub_link.json', 'r+', encoding='UTF-8') as sub_file:
             sub = json.load(sub_file)
         print("找到订阅链接，进行下一步")
     return sub
