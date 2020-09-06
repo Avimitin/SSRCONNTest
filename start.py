@@ -77,16 +77,16 @@ def main(debug=False):
 
     opt = OPT(name="OxygenProxy", test_mode="pingonly", egfilter=["官网", "如果发现"], filter=["深港专线"], confirmation=True, url=ssr_url)
 
-    sys.path.extend(["SSRSpeed", "web"])
-    print(sys.path)
+    sys.path.append(os.getcwd()+r"\SSRSpeed")
     os.chdir("SSRSpeed")
 
     from SSRSpeed import main
     filename, pTime = main.start(opt)
-    unixTime = time.mktime(time.strptime(pTime, "%Y-%m-%d-%H-%M-%S"))
+    unixTime = int(time.mktime(time.strptime(pTime, "%Y-%m-%d-%H-%M-%S")))
 
-    from web.bin.database import ResultHandler
-    r = ResultHandler.ResultHandler()
+    sys.path.append(os.getcwd()+r"\web")
+    import web.bin.database.ResultHandler as Result
+    r = Result.ResultHandler()
     r.add_new_result(opt.name, filename, unixTime)
     print(r.get_result_by_keyword(time=unixTime))
 
