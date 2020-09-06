@@ -57,7 +57,7 @@ class ResultHandler:
             sql = "SELECT * FROM `result` WHERE NAME=%s"
             val = (kwargs["name"],)
         else:
-            sql = "SELECT * FROM result WHERE TIME=%d"
+            sql = "SELECT * FROM result WHERE TIME=%s"
             val = (kwargs["time"],)
         results = self._safe_execute(sql, val)
         if results is not Exception:
@@ -107,4 +107,4 @@ class ResultHandler:
 
 if __name__ == '__main__':
     test = ResultHandler()
-    print(test.add_new_result("test4", "FFFF", 11451400))
+    print(test.get_result_by_keyword(time=1599379315))
