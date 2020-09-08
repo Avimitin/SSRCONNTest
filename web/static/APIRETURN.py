@@ -22,6 +22,7 @@ INVALID = {
 
 
 EMPTY = {
+    "ok": False,
     "error": "EMPTY JSON REQUEST"
 }
 
@@ -31,3 +32,9 @@ EMPTY_ARGS_GUIDE = {
     "description": "YOUR SEARCHING ARGS ARE EMPTY, YOU MUST INPUT SEARCHING ARGS LIKE: "
                    "https://example.com/api/v1/result?time=114514 "
 }
+
+
+def add_more_info(guide_name: dict, info: str):
+    guide_name["more_info"] = info
+    return guide_name
+
