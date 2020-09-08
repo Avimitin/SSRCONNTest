@@ -42,24 +42,36 @@ def subscriptions_handler():
     if request.json["token"] == TOKEN:
         try:
             subs = request.json["subs"]
-            if subs is []:
+            if not subs:
                 return make_response(
-                    APIRETURN.add_more_info(
+                    jsonify(APIRETURN.add_more_info(
                         APIRETURN.EMPTY,
                         "YOU MUST ADD SOME SUB INFO IN THE LIST"
-                    ),
+                    )),
                     200
                 )
             for sub in subs:
+                if not isinstance(sub, dict):
+                    return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "OBJECT IN LIST MUST BE DICT"), 400))
                 name = sub["name"]
                 link = sub["link"]
-                print(name + " " + link)
+                if name is None or link is None:
+                    return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "CANT NOT INPUT NULL VALUES")), 400)
         except KeyError:
-            return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "")))
+            return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "PUT SUBS INTO YOUR POST FILE")), 400)
         except IndexError:
-            return
+            return make_response(
+                jsonify(
+                    APIRETURN.add_more_info(
+                        APIRETURN.INVALID,
+                        'Exp: '
+                        '{"subs": [{"name": "name", "link": "link"}]}'
+                    )
+                ),
+                400
+            )
     else:
-        return make_response(jsonify(APIRETURN.UNAUTHORIZED))
+        return make_response(jsonify(APIRETURN.UNAUTHORIZED), 401)
 
 
 
