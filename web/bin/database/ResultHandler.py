@@ -2,7 +2,7 @@
 # author: Avimitin
 # datetime: 2020/9/2 17:36
 # Program to handle all the data in table result
-from web.bin.database.DBConnector import DBConnect
+from web.bin.database import SafeExecute
 
 
 class ResultHandler:
@@ -13,13 +13,14 @@ class ResultHandler:
         """
         Database Connector Initialize
         """
-        self.db = DBConnect()
+        self._safe_execute = SafeExecute.safe_execute
 
+    """
     def _get_all_rows_in_result(self):
-        """
+        '''
         Get all rows in table !!!FOR TESTING!!! Don't use it.
         :return fetchall(): return searching result if no Exception else return Exception
-        """
+        '''
         sql = "SELECT * FROM `result`"
         cur = self.db.get_cur()
         try:
@@ -33,12 +34,12 @@ class ResultHandler:
             return e
         finally:
             cur.close()
+    """
 
     def get_result_by_keyword(self, **kwargs):
         """
         get result by name
-        :param name: A string object that contain name of the result
-        :param time: A int object about when the result generate
+        :param kwargs: Need key 'name' or 'time'
         :return:
             Return result if no exception, else return exception.
             Result is a list that contain many dict object about data.
@@ -90,19 +91,6 @@ class ResultHandler:
             "TIME": TIME
         }
         return format_data
-
-    def _safe_execute(self, sql: str, val: tuple):
-        db = self.db.get_db()
-        cur = self.db.get_cur()
-        try:
-            cur.execute(sql, val)
-            db.commit()
-            return cur.fetchall()
-        except Exception as e:
-            db.rollback()
-            return e
-        finally:
-            cur.close()
 
 
 if __name__ == '__main__':
