@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from web.static import APIRETURN
-from web.bin.database import ResultHandler
+from web.bin.database import ResultHandler, SubHandler
 
 app = Flask(__name__)
 
@@ -52,13 +52,45 @@ def subscriptions_handler():
                 )
             for sub in subs:
                 if not isinstance(sub, dict):
-                    return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "OBJECT IN LIST MUST BE DICT"), 400))
-                name = sub["name"]
-                link = sub["link"]
+                    return make_response(
+                        jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "OBJECT IN LIST MUST BE DICT"), 400))
+                try:
+                    name = sub["name"]
+                    link = sub["link"]
+                except KeyError:
+                    return make_response(
+                        jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "UNKNOWN KEY, NEED ARGS LIKE THIS: "
+                                                                           "{'name': 'name', 'link': 'link'}")),
+                        400
+                    )
                 if name is None or link is None:
-                    return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "CANT NOT INPUT NULL VALUES")), 400)
+                    return make_response(
+                        jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "CANT NOT INPUT NULL VALUES")), 400)
+                else:
+                    s = SubHandler.SubHandler()
+                    result = s.add_new_subscriptions(name, link)
+                    if result["ok"]:
+                        return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.OK, "INSERT DONE")), 200)
+                    return make_response(jsonify(APIRETURN.INTERNAL_SERVER_ERROR), 500)
         except KeyError:
-            return make_response(jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "PUT SUBS INTO YOUR POST FILE")), 400)
+            if not request.json.get("search"):
+                return make_response(
+                    jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "PUT SUBS OR SEARCH INTO YOUR POST FILE")), 400)
+
+            args = request.json.get("search")
+            if not isinstance(args, list):
+                return make_response(
+                        jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "SEARCH MUST BE A LIST"), 400))
+
+            s = SubHandler.SubHandler()
+            results = []
+            for arg in args:
+                response = s.get_sub_link_by_name(arg)
+                if response:
+                    results.append(response)
+
+            return make_response(jsonify(ok=True, results=results), 200)
+
         except IndexError:
             return make_response(
                 jsonify(
@@ -66,13 +98,13 @@ def subscriptions_handler():
                         APIRETURN.INVALID,
                         'Exp: '
                         '{"subs": [{"name": "name", "link": "link"}]}'
-                    )
-                ),
+                    )),
                 400
             )
+        except Exception:
+            return make_response(jsonify(ok=False, descriptions="Error Occur", more_info=Exception), 400)
     else:
         return make_response(jsonify(APIRETURN.UNAUTHORIZED), 401)
-
 
 
 @app.errorhandler(404)
