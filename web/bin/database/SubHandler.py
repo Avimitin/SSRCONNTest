@@ -1,33 +1,35 @@
 # -*- coding: utf-8 -*-
 # author: Avimitin
 # datetime: 2020/9/8 11:27
-from web.bin.database import DBConnector
+from web.bin.database import SafeExecute
 
 
 class SubHandler:
     def __init__(self):
-        self.db = DBConnector.DBConnect()
+        self._safe_execute = SafeExecute.safe_execute
 
     def get_sub_link_by_name(self, name):
         sql = "SELECT * FROM subscriptions WHERE NAME=%s"
         val = (name,)
-        self._safe_execute(sql, val)
+        results = self._safe_execute(sql, val)
+        if results:
+            response = {"ok": True, "result": []}
+            for result in results:
+                ID, NAME, LINK = result
+                response["result"].append({"ID": ID, "NAME": NAME, "LINK": LINK})
+            return response
+        return False
 
     def add_new_subscriptions(self, name, link):
         sql = "INSERT INTO subscriptions (Name, SubLink) VALUES (%s, %s)"
         val = (name, link)
         self._safe_execute(sql, val)
+        sql = "SELECT * FROM subscriptions WHERE NAME = %s"
+        val = (name,)
+        result = self._safe_execute(sql, val)
+        return {"ok": False} if not result else {"ok": True}
 
-    def _safe_execute(self, sql: str, val: tuple):
-        db = self.db.get_db()
-        cur = self.db.get_cur()
-        try:
-            cur.execute(sql, val)
-            db.commit()
-            return cur.fetchall()
-        except Exception as e:
-            db.rollback()
-            return e
-        finally:
-            cur.close()
 
+if __name__ == '__main__':
+    s = SubHandler()
+    print(s.get_sub_link_by_name("oxygenproxy"))
