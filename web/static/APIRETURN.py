@@ -33,6 +33,16 @@ EMPTY_ARGS_GUIDE = {
                    "https://example.com/api/v1/result?time=114514 "
 }
 
+OK = {
+    "ok": True
+}
+
+INTERNAL_SERVER_ERROR = {
+    "ok": False,
+    "error_code": 500,
+    "descriptions": "UNEXPECTED ERROR OCCUR"
+}
+
 
 def add_more_info(guide_name: dict, info: str):
     guide_name["more_info"] = info
