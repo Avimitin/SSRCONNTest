@@ -6,3 +6,4 @@ configs
 web/config
 web/test
 __pycache__
+BotConfig
