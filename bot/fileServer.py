@@ -3,7 +3,7 @@
 # datetime: 2020/9/10 15:24
 from flask import Flask, request, make_response, jsonify
 from werkzeug.utils import secure_filename
-from bot.BotInstance import BOT, ADMIN
+from BotInstance import BOT, ADMIN
 
 app = Flask(__name__)
 __TOKEN__ = "dev"
@@ -11,14 +11,14 @@ __TOKEN__ = "dev"
 
 @app.route("/upload", methods=["POST"])
 def get_file():
-    if "token" not in request.json or request.json["token"] != __TOKEN__:
+    if "token" not in request.form or request.form["token"] != __TOKEN__:
         return make_response(
             jsonify(ok=False, error_code=401, descriptions="Invalid token"),
             401
         )
 
     try:
-        files = request.files["test_file"]
+        files = request.files["file"]
 
         if files.filename == "":
             return make_response(
@@ -33,7 +33,10 @@ def get_file():
             )
     except KeyError:
         return make_response(
-            jsonify(ok=False, error_code=400, descriptions="No file received"),
+            jsonify(ok=False,
+                    error_code=400,
+                    descriptions="No file received",
+                    more_info="Check if you put file in wrong name"),
             400
         )
 
