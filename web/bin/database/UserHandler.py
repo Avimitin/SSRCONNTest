@@ -27,7 +27,7 @@ class UserHandler:
             val = (uid,)
             results = self._safe_execute(sql, val)
             if results:
-                return {"ok": True, "results": self._format_result(results)}
+                return {"ok": True, "results": str(self._format_result(results))}
             return {"ok": False, "descriptions": "Empty result"}
 
         name = kwargs.get("name")
@@ -36,7 +36,7 @@ class UserHandler:
             val = (name,)
             results = self._safe_execute(sql, val)
             if results:
-                return {"ok": True, "results": self._format_result(results)}
+                return {"ok": True, "results": str(self._format_result(results))}
             return {"ok": False, "descriptions": "Empty result"}
 
         permission = kwargs.get("permission")
@@ -45,12 +45,13 @@ class UserHandler:
             val = (permission,)
             results = self._safe_execute(sql, val)
             if results:
-                return {"ok": True, "results": self._format_result(results)}
+                return {"ok": True, "results": str(self._format_result(results))}
             return {"ok": False, "descriptions": "Empty result"}
 
         raise TypeError("get_user_by_keyword() got unexpected arguments")
 
     def add_users(self, uid: int, name: str, permission: str):
+        permission = permission.lower()
         ALLOW_PERMISSION = ["admin", "manager"]
         if permission not in ALLOW_PERMISSION:
             raise TypeError("add_users() got unexpected permission: '%s'" % permission)
@@ -62,10 +63,10 @@ class UserHandler:
             sql = "SELECT UID FROM USERS WHERE UID = %s"
             val = (uid,)
             results = self._safe_execute(sql, val)
-            if results and results[0][0] == uid:
+            if results and results[0][0] == int(uid):
                 return {"ok": True}
 
-        return {"ok": False, "descriptions": results}
+        return {"ok": False, "descriptions": str(results)}
 
     def delete_user(self, uid):
         sql = "DELETE FROM USERS WHERE UID = %s"
@@ -73,7 +74,7 @@ class UserHandler:
         result = self._safe_execute(sql, val)
         if not isinstance(result, Exception):
             return {"ok": True}
-        return {"ok": False, "descriptions": result}
+        return {"ok": False, "descriptions": str(result)}
 
     def edit_user_info(self, uid, **kwargs):
         name = kwargs.get("name")
@@ -99,7 +100,7 @@ class UserHandler:
         if not isinstance(result, Exception):
             return {"ok": True}
 
-        return {"ok": False, "descriptions": result}
+        return {"ok": False, "descriptions": str(result)}
 
     @staticmethod
     def _format_result(results):
@@ -113,4 +114,4 @@ class UserHandler:
 
 if __name__ == '__main__':
     u = UserHandler()
-    print(u.add_users(123, "test", "manager"))
+    print(u.add_users("114514", "test", "manager"))
