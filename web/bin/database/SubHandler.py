@@ -13,21 +13,61 @@ class SubHandler:
         val = (name,)
         results = self._safe_execute(sql, val)
         if results:
-            response = {"ok": True, "result": []}
+            response = {"ok": True, "results": []}
             for result in results:
                 ID, NAME, LINK = result
-                response["result"].append({"ID": ID, "NAME": NAME, "LINK": LINK})
+                response["results"].append({"ID": ID, "NAME": NAME, "LINK": LINK})
             return response
-        return False
+        return {"ok": False, "descriptions": "Empty result"}
 
     def add_new_subscriptions(self, name, link):
         sql = "INSERT INTO subscriptions (Name, SubLink) VALUES (%s, %s)"
         val = (name, link)
-        self._safe_execute(sql, val)
-        sql = "SELECT * FROM subscriptions WHERE NAME = %s"
-        val = (name,)
-        result = self._safe_execute(sql, val)
-        return {"ok": False} if not result else {"ok": True}
+        results = self._safe_execute(sql, val)
+        if not isinstance(results, Exception):
+            sql = "SELECT * FROM subscriptions WHERE NAME = %s"
+            val = (name,)
+            results = self._safe_execute(sql, val)
+            if results:
+                return {"ok": True}
+            return {"ok": False, "descriptions": "Fail to insert into table"}
+
+        return {"ok": False, "descriptions": results}
+
+    def edit_subscriptions(self, name, link):
+        sql = "UPDATE subscriptions SET LINK=%s WHERE NAME=%s"
+        val = (name, link)
+        results = self._safe_execute(sql, val)
+
+        if not isinstance(results, Exception):
+            sql = "SELECT * FROM subscriptions WHERE NAME = %s"
+            val = (name, )
+            results = self._safe_execute(sql, val)
+            if results:
+                f_list = []
+                for result in results:
+                    ID, NAME, LINK = result
+                    f_list.append({"ID": ID, "NAME": NAME, "LINK": LINK})
+                return {"ok": True, "NewResult": f_list}
+
+            return {"ok": False, "descriptions": "Fail to update subs info"}
+
+        return {"ok": False, "descriptions": results}
+
+    def delete_link(self, name, **kwargs):
+        ID = kwargs.get("id")
+        if ID:
+            sql = "DELETE FROM subscriptions WHERE NAME = %s AND ID = %s"
+            val = (name, ID)
+        else:
+            sql = "DELETE FROM subscriptions WHERE NAME = %s"
+            val = (name, )
+        results = self._safe_execute(sql, val)
+
+        if isinstance(results, Exception):
+            return {"ok": False, "descriptions": Exception}
+
+        return {"ok": True}
 
 
 if __name__ == '__main__':
