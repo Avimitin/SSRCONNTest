@@ -23,7 +23,7 @@ INVALID = {
 
 EMPTY = {
     "ok": False,
-    "error": "EMPTY JSON REQUEST"
+    "error": "EMPTY DATA REQUEST"
 }
 
 EMPTY_ARGS_GUIDE = {
