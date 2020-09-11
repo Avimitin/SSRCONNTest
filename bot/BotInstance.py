@@ -3,12 +3,10 @@
 # datetime: 2020/9/10 16:10
 import telebot
 import json
+from BotConfig import conf
 
-with open("BotConfig/botToken.json", "r", encoding="utf-8") as conf_file:
-    TOKEN = json.load(conf_file)["TOKEN"]
-
-with open("BotConfig/user.json", "r", encoding="utf-8") as user_file:
-    ALLOW_USERS = json.load(user_file)["ALLOW_USER"]
+TOKEN = conf.BOT_TOKEN
+ALLOW_USERS = conf.ALLOW_USERS
 
 for user in ALLOW_USERS:
     if user["Permission"] == "admin":
