@@ -7,6 +7,15 @@ db = DBConnect()
 
 
 def safe_execute(sql: str, val: tuple):
+    """
+    Usage: Input sql order and value, This functions will connect to
+    database and finally close all reference to induce memory.
+
+    :params sql: sql order in MySQL grammar
+    :params val: value that need to input into database
+    :return: return a tuple of result if no exceptions. Else return
+    exceptions.
+    """
     db_ref = db.get_db()
     cur = db.get_cur()
     try:
