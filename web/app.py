@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from web.static import APIRETURN
-from web.bin.database import ResultHandler, SubHandler
+from web.bin.database import ResultHandler, SubHandler, UserHandler
+import configparser
 
 app = Flask(__name__)
 
@@ -105,6 +106,44 @@ def subscriptions_handler():
             return make_response(jsonify(ok=False, descriptions="Error Occur", more_info=Exception), 400)
     else:
         return make_response(jsonify(APIRETURN.UNAUTHORIZED), 401)
+
+
+@app.route("/api/v1/verify", methods=["POST"])
+def verify():
+    parser = configparser.ConfigParser()
+    parser.read("../configs/settings.ini")
+    StartUpToken = parser.get("Privacy", "StartUpToken")
+    if StartUpToken is not "0":
+        token = request.form.get("token")
+        if not token:
+            return make_response(
+                jsonify(APIRETURN.add_more_info(APIRETURN.EMPTY, "First time verify need a StartUpToken")),
+                400
+            )
+        if token != StartUpToken:
+            return make_response(
+                jsonify(APIRETURN.add_more_info(APIRETURN.UNAUTHORIZED, "Unexpected token")),
+                401)
+
+        name = request.form.get("name")
+        uid = request.form.get("uid")
+        permission = "admin"
+        if not (name and uid):
+            return make_response(
+                jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "Missing arguments")),
+                400
+            )
+
+        u = UserHandler.UserHandler()
+        result = u.add_users(uid, name, permission)
+
+        if result["ok"]:
+            parser.set("Privacy", "StartUpToken", "0")
+            parser.write(open("../configs/settings.ini", "w"))
+
+        return make_response(jsonify(result), 200)
+
+    return "StartUpToken has been removed"
 
 
 @app.errorhandler(404)
