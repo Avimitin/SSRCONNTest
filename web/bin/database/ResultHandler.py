@@ -61,7 +61,7 @@ class ResultHandler:
             sql = "SELECT * FROM result WHERE TIME=%s"
             val = (kwargs["time"],)
         results = self._safe_execute(sql, val)
-        if results is not Exception:
+        if not isinstance(results, Exception):
             result_list = []
             for row in results:
                 result_list.append(self._format_result_all(row))
@@ -73,13 +73,15 @@ class ResultHandler:
         sql = "INSERT INTO result (NAME, PLACE, TIME) VALUES (%s, %s, %s)"
         val = (name, place, time)
         result = self._safe_execute(sql, val)
-        if result == ():
+        if not isinstance(result, Exception):
             sql = "SELECT * FROM result WHERE NAME=%s AND PLACE=%s AND TIME=%s"
             result = self._safe_execute(sql, val)
-            if result != ():
-                return {"OK": True}
-            else:
-                return {"OK": False}
+            if result:
+                return {"ok": True}
+
+            return {"ok": False, "descriptions": "Fail to insert result"}
+
+        return {"ok": False, "descriptions": str(result)}
 
     @staticmethod
     def _format_result_all(row):
