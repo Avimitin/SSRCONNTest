@@ -39,14 +39,18 @@ class TokenGenerator:
 
         return "{}.{}".format(payload, sign)
 
-    def _payload_base64_generate(self):
-        payload_base64 = base64.b64encode(self.payload.encode("utf-8"))
-        return payload_base64
-
-    def _get_salt(self):
+    def get_salt(self):
+        """
+        :return: This function will return the random combine of string 
+        and time stamp.
+        """
         combine_text = string.ascii_letters + self._get_time_stamp()
         salt = "".join(random.sample(combine_text, 16))
         return salt
+
+    def _payload_base64_generate(self):
+        payload_base64 = base64.b64encode(self.payload.encode("utf-8"))
+        return payload_base64
 
     @staticmethod
     def _encrypt(salt, payload):
