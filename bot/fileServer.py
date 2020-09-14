@@ -3,7 +3,7 @@
 # datetime: 2020/9/10 15:24
 from flask import Flask, request, make_response, jsonify
 from werkzeug.utils import secure_filename
-from .BotInstance import BOT, ADMIN
+from .Botintialize import BOT, ADMIN
 
 app = Flask(__name__)
 __TOKEN__ = "dev"
