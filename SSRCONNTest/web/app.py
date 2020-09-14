@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from web.static import APIRETURN
-from web.bin.database import ResultHandler, SubHandler, UserHandler
+from utils.database import ResultHandler, SubHandler, UserHandler
 import configparser
 
 app = Flask(__name__)
