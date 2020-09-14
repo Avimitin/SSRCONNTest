@@ -2,9 +2,11 @@
 # author: Avimitin
 # datetime: 2020/8/30 16:31
 import pymysql
-from configs import db_cfg
+import configparser
 
-DATABASE_CFG = db_cfg.CONFIG
+config = configparser.ConfigParser()
+config.read("configs/db_cfg.ini")
+DATABASE_CFG = config["DBCONFIG"]
 
 
 class DBConnect:
@@ -30,4 +32,4 @@ class DBConnect:
 
 
 if __name__ == '__main__':
-    pass
+    print(DATABASE_CFG["host"])

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: Avimitin
 # datetime: 2020/9/8 11:27
-from web.bin.database import SafeExecute
+from utils.database import SafeExecute
 
 
 class SubHandler:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: Avimitin
 # datetime: 2020/9/11 9:25
-from web.bin.database.SafeExecute import safe_execute
+from utils.database.SafeExecute import safe_execute
 
 
 class UserHandler:

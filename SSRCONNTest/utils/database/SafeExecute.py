@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: Avimitin
 # datetime: 2020/9/9 17:23
-from web.bin.database.DBConnector import DBConnect
+from utils.database.DBConnector import DBConnect
 
 db = DBConnect()
 

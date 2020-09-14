@@ -2,7 +2,7 @@
 # author: Avimitin
 # datetime: 2020/9/2 17:36
 # Program to handle all the data in table result
-from web.bin.database import SafeExecute
+from utils.database import SafeExecute
 
 
 class ResultHandler:

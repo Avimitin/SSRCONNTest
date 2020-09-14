@@ -22,14 +22,12 @@ class TokenGenerator:
             }
     Sign is a secret key that generate and encrypt by time, random number and user_info.
     """
-    def __init__(self, username, uid):
-        self.payload = """{"username": "%s", "uid": "%s"}""" % (username, uid)
-
-    def new(self):
+    def new(self, username, uid):
         """
         Usage: use this method to generate new token
         :Return: return a string of token
         """
+        self.payload = """{"username": "%s", "uid": "%s"}""" % (username, uid)
         payload_base64 = self._payload_base64_generate()
         payload = str(payload_base64, "utf-8").replace("=", "")
         
