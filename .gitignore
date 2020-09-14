@@ -4,7 +4,6 @@ configs
 config
 .vscode
 .idea
-web/config
-web/test
+test
 __pycache__
 BotConfig
