@@ -8,51 +8,7 @@ import json
 import zipfile
 import platform
 import time
-
-
-class OPT:
-    def __init__(self,
-                 name,
-                 paolu=False,
-                 debug=False,
-                 test_method=None,
-                 test_mode=None,
-                 confirmation=True,
-                 result_color=None,
-                 import_file=False,
-                 guiConfig=None,
-                 url=None,
-                 filter=None,
-                 group=None,
-                 remarks=None,
-                 efliter=None,
-                 egfilter=None,
-                 erfilter=None,
-                 sort_method=None,
-                 group_override=None,
-                 use_ssr_CSharp=False,
-                 skip_requirements_check=True
-                 ):
-        self.name = name
-        self.paolu = paolu
-        self.debug = debug
-        self.test_method = test_method
-        self.test_mode = test_mode
-        self.confirmation = confirmation
-        self.result_color = result_color
-        self.import_file = import_file
-        self.guiConfig = guiConfig
-        self.url = url
-        self.filter = filter
-        self.group = group
-        self.remarks = remarks
-        self.efliter = efliter
-        self.egfilter = egfilter
-        self.erfilter = erfilter
-        self.sort_method = sort_method
-        self.group_override = group_override
-        self.use_ssr_cs = use_ssr_CSharp
-        self.skip_requirements_check = skip_requirements_check
+from bin.options import OPT
 
 
 def main(debug=False):
@@ -80,12 +36,12 @@ def main(debug=False):
     sys.path.append(os.getcwd()+r"\SSRSpeed")
     os.chdir("SSRSpeed")
 
-    from SSRSpeed import main
+    from bin.SSRSpeed import main
     filename, pTime = main.start(opt)
     unixTime = int(time.mktime(time.strptime(pTime, "%Y-%m-%d-%H-%M-%S")))
 
     sys.path.append(os.getcwd()+r"\web")
-    import web.bin.database.ResultHandler as Result
+    import utils.database.ResultHandler as Result
     r = Result.ResultHandler()
     r.add_new_result(opt.name, filename, unixTime)
     result = r.get_result_by_keyword(time=unixTime)
