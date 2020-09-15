@@ -31,7 +31,7 @@ class TokenGenerator:
         payload_base64 = self._payload_base64_generate()
         payload = str(payload_base64, "utf-8").replace("=", "")
         
-        salt = self._get_salt()
+        salt = self.get_salt()
         secret_key = self._encrypt(salt, payload_base64)
         sign = str(secret_key, "utf-8").replace("=", "")
 
