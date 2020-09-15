@@ -50,21 +50,21 @@ class UserHandler:
 
         raise TypeError("get_user_by_keyword() got unexpected arguments")
 
-    def add_users(self, uid: int, name: str, permission: str):
+    def add_users(self, uid: int, name: str, permission: str, token: str):
         permission = permission.lower()
         ALLOW_PERMISSION = ["admin", "manager"]
         if permission not in ALLOW_PERMISSION:
             raise TypeError("add_users() got unexpected permission: '%s'" % permission)
 
-        sql = "INSERT INTO USERS (UID, NAME, PERMISSION) VALUES (%s, %s, %s)"
-        val = (uid, name, permission)
+        sql = "INSERT INTO USERS (UID, NAME, PERMISSION, TOKEN) VALUES (%s, %s, %s, %s)"
+        val = (uid, name, permission, token)
         results = self._safe_execute(sql, val)
         if not isinstance(results, Exception):
             sql = "SELECT UID FROM USERS WHERE UID = %s"
             val = (uid,)
             results = self._safe_execute(sql, val)
             if results and results[0][0] == int(uid):
-                return {"ok": True}
+                return {"ok": True, "token": token, "info": "Please take care of your token"}
 
         return {"ok": False, "descriptions": str(results)}
 
