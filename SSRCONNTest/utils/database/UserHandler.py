@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: Avimitin
 # datetime: 2020/9/11 9:25
-from utils.database.SafeExecute import safe_execute
+from ..database.SafeExecute import safe_execute
 
 
 class UserHandler:
@@ -45,7 +45,7 @@ class UserHandler:
             val = (permission,)
             results = self._safe_execute(sql, val)
             if results:
-                return {"ok": True, "results": str(self._format_result(results))}
+                return {"ok": True, "results": self._format_result(results)}
             return {"ok": False, "descriptions": "Empty result"}
 
         raise TypeError("get_user_by_keyword() got unexpected arguments")
@@ -60,11 +60,7 @@ class UserHandler:
         val = (uid, name, permission, token)
         results = self._safe_execute(sql, val)
         if not isinstance(results, Exception):
-            sql = "SELECT UID FROM USERS WHERE UID = %s"
-            val = (uid,)
-            results = self._safe_execute(sql, val)
-            if results and results[0][0] == int(uid):
-                return {"ok": True, "token": token, "info": "Please take care of your token"}
+            return {"ok": True, "token": token, "info": "Please take care of your token"}
 
         return {"ok": False, "descriptions": str(results)}
 
@@ -73,7 +69,7 @@ class UserHandler:
         val = (uid, )
         result = self._safe_execute(sql, val)
         if not isinstance(result, Exception):
-            return {"ok": True}
+            return {"ok": True, "descriptions": "Delete successful"}
         return {"ok": False, "descriptions": str(result)}
 
     def edit_user_info(self, uid, **kwargs):
@@ -106,12 +102,12 @@ class UserHandler:
     def _format_result(results):
         formatted_list = []
         for result in results:
-            UID, PERMISSION, NAME = result
-            d = {"UID": UID, "PERMISSION": PERMISSION, "NAME": NAME}
+            UID, PERMISSION, NAME, TOKEN = result
+            d = {"UID": UID, "PERMISSION": PERMISSION, "NAME": NAME, "TOKEN": TOKEN}
             formatted_list.append(d)
         return formatted_list
 
 
 if __name__ == '__main__':
     u = UserHandler()
-    print(u.add_users("114514", "test", "manager"))
+    u.delete_user(649191333)    
