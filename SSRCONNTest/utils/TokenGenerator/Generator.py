@@ -13,7 +13,9 @@ class TokenGenerator:
     """
     Generate a token for authorized
     The token will be like JWT(JSON Web Token) but much simpler.
-    The token will contain two part: Payload and Sign.
+    The token using a time stamp which generated when using `TokenGenerator.new()` methods,
+    and randomize it with `string.ascii` to generate key.
+    Use this key to encrypt payload with SHA256 algorithms.
     Payload is all the info about token, pakage in JSON dict like:
         Exp: 
             {
@@ -25,17 +27,16 @@ class TokenGenerator:
     def new(self, username, uid):
         """
         Usage: use this method to generate new token
-        :Return: return a string of token
+        :Return: return a tuple of encrypt key and token
         """
         self.payload = """{"username": "%s", "uid": "%s"}""" % (username, uid)
         payload_base64 = self._payload_base64_generate()
-        payload = str(payload_base64, "utf-8").replace("=", "")
         
         salt = self.get_salt()
         secret_key = self._encrypt(salt, payload_base64)
-        sign = str(secret_key, "utf-8").replace("=", "")
+        sign = self._safe_b64_url_encode(secret_key)
 
-        return "{}.{}".format(payload, sign)
+        return (salt, sign.decode("utf-8"))
 
     def get_salt(self):
         """
@@ -45,21 +46,31 @@ class TokenGenerator:
         combine_text = string.ascii_letters + self._get_time_stamp()
         salt = "".join(random.sample(combine_text, 16))
         return salt
-
+    
     def _payload_base64_generate(self):
-        payload_base64 = base64.b64encode(self.payload.encode("utf-8"))
+        payload_base64 = self._safe_b64_url_encode(self.payload)
         return payload_base64
 
     @staticmethod
     def _encrypt(salt, payload):
-        secret = hmac.new(salt.encode("utf-8"), payload, sha256)
-        secret_digest = secret.hexdigest()
-        return base64.b64encode(secret_digest.encode("utf-8"))
+        secret = hmac.new(salt.encode("utf-8"), payload, sha256).digest()
+        return secret
 
     @staticmethod
     def _get_time_stamp():
         return str(round(time.time()))
 
+    @staticmethod
+    def _safe_b64_url_encode(val):
+        if isinstance(val, str):
+            val = val.encode("utf-8")
+        elif isinstance(val, bytes):
+            pass
+        else:
+            raise TypeError("Expected Bytes or String Values")
+        
+        return base64.urlsafe_b64encode(val).replace(b"=", b"")
+
 if __name__ == '__main__':
-    t = TokenGenerator("test", "123")
-    print(t.new())
+    t = TokenGenerator()
+    print(t.new("avimitin", "114514"))
