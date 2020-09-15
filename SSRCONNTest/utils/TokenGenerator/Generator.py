@@ -3,10 +3,10 @@
 # datetime: 2020/9/13 18:44
 import hmac
 import base64
-import random
 import time
 from hashlib import sha256
 import string
+import secrets
 
 
 class TokenGenerator:
@@ -32,19 +32,23 @@ class TokenGenerator:
         self.payload = """{"username": "%s", "uid": "%s"}""" % (username, uid)
         payload_base64 = self._payload_base64_generate()
         
-        salt = self.get_salt()
+        salt = self.get_salt(16)
         secret_key = self._encrypt(salt, payload_base64)
         sign = self._safe_b64_url_encode(secret_key)
 
         return (salt, sign.decode("utf-8"))
 
-    def get_salt(self):
+    def get_salt(self, length):
         """
         :return: This function will return the random combine of string 
         and time stamp.
         """
         combine_text = string.ascii_letters + self._get_time_stamp()
-        salt = "".join(random.sample(combine_text, 16))
+        salt = ""
+        while length > 0:
+            ref = secrets.choice(combine_text)
+            salt += ref
+            length -= 1
         return salt
     
     def _payload_base64_generate(self):
@@ -73,4 +77,4 @@ class TokenGenerator:
 
 if __name__ == '__main__':
     t = TokenGenerator()
-    print(t.new("avimitin", "114514"))
+    print(t.get_salt(16))
