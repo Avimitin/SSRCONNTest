@@ -20,7 +20,7 @@ def set_start_up_token():
     config = configparser.ConfigParser()
     config.read("./web/config/settings.ini")
     g = Generator.TokenGenerator()
-    StartUpToken = g.get_salt()
+    StartUpToken = g.get_salt(16)
     config["Privacy"]["StartUpToken"] = StartUpToken
     with open("./web/config/settings.ini", "w") as configfile:
         config.write(configfile)
