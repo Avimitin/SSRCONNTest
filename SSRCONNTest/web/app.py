@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from web.static import APIRETURN
 from utils.database import ResultHandler, SubHandler, UserHandler
+from utils.TokenGenerator import Generator
 import configparser
 
 app = Flask(__name__)
@@ -111,9 +112,9 @@ def subscriptions_handler():
 @app.route("/api/v1/verify", methods=["POST"])
 def verify():
     parser = configparser.ConfigParser()
-    parser.read("../configs/settings.ini")
+    parser.read("web/config/settings.ini")
     StartUpToken = parser.get("Privacy", "StartUpToken")
-    if StartUpToken is not "0":
+    if StartUpToken != "0":
         token = request.form.get("token")
         if not token:
             return make_response(
@@ -133,17 +134,19 @@ def verify():
                 jsonify(APIRETURN.add_more_info(APIRETURN.INVALID, "Missing arguments")),
                 400
             )
+        g = Generator.TokenGenerator()
+        token = g.new(name, uid)
 
         u = UserHandler.UserHandler()
-        result = u.add_users(uid, name, permission)
+        result = u.add_users(uid, name, permission, token)
 
         if result["ok"]:
             parser.set("Privacy", "StartUpToken", "0")
-            parser.write(open("../configs/settings.ini", "w"))
+            parser.write(open("web/config/settings.ini", "w"))
 
         return make_response(jsonify(result), 200)
 
-    return "StartUpToken has been removed"
+    return make_response(APIRETURN.add_more_info(APIRETURN.NOTFOUND, "This page has been removed."))
 
 
 @app.errorhandler(404)
