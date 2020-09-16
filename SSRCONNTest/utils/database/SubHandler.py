@@ -12,7 +12,7 @@ class SubHandler:
         sql = "SELECT * FROM subscriptions WHERE NAME=%s"
         val = (name,)
         results = self._safe_execute(sql, val)
-        if results:
+        if not isinstance(results, Exception):
             response = {"ok": True, "results": []}
             for result in results:
                 ID, NAME, LINK = result
@@ -40,17 +40,8 @@ class SubHandler:
         results = self._safe_execute(sql, val)
 
         if not isinstance(results, Exception):
-            sql = "SELECT * FROM subscriptions WHERE NAME = %s"
-            val = (name, )
-            results = self._safe_execute(sql, val)
-            if results:
-                f_list = []
-                for result in results:
-                    ID, NAME, LINK = result
-                    f_list.append({"ID": ID, "NAME": NAME, "LINK": LINK})
-                return {"ok": True, "NewResult": f_list}
-
-            return {"ok": False, "descriptions": "Fail to update subs info"}
+            response = self.get_sub_link_by_name(name)
+            return response
 
         return {"ok": False, "descriptions": results}
 
@@ -67,7 +58,7 @@ class SubHandler:
         if isinstance(results, Exception):
             return {"ok": False, "descriptions": Exception}
 
-        return {"ok": True}
+        return {"ok": True, "descriptions": "delete successfully"}
 
 
 if __name__ == '__main__':
