@@ -8,20 +8,24 @@ __MANAGER__ = []
 def get_admin():
     global __ADMIN__
     response = u.get_user_by_keyword(permission="admin")
-    TOKENS = [user["TOKEN"] for user in response["results"]]
+    try:
+        TOKENS = [user["TOKEN"] for user in response["results"]]
+    except KeyError:
+        return
     __ADMIN__ = TOKENS
     return TOKENS
 
 def get_manager():
     response = u.get_user_by_keyword(permission="manager")
-    TOKENS = [user["TOKEN"] for user in response["results"]]
+    try:
+        TOKENS = [user["TOKEN"] for user in response["results"]]
+    except KeyError:
+        return
+    __MANAGER__ = TOKENS
     return TOKENS
-
 
 def auth(token):
     get_admin()
-    return token in __ADMIN__
+    get_manager()
+    return token in __ADMIN__ or token in __MANAGER__
 
-if __name__ == "__main__":
-    print(auth("2B4W6yONPXlslr0JhOAD8nbrI4fo1F2x4NfqJlSkbAI"))
-    print(__ADMIN__)
