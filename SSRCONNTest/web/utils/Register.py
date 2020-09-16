@@ -2,13 +2,13 @@ from utils.TokenGenerator import Generator
 from utils.database import UserHandler
 
 def register(username, uid, permission):
-    token = generate_token(username, uid)[1]
-    return add_new_user(username, uid, permission, token)
+    token = _generate_token(username, uid)[1]
+    return _add_new_user(username, uid, permission, token)
 
-def generate_token(username, uid):
+def _generate_token(username, uid):
     return Generator.TokenGenerator().new(username, uid)
 
-def add_new_user(username, uid, permission, token):
+def _add_new_user(username, uid, permission, token):
     u = UserHandler.UserHandler()
     return u.add_users(uid, username, permission, token)
 
