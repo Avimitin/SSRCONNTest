@@ -130,7 +130,36 @@ def verify():
 
 @app.route("/api/v1/users", methods=["POST"])
 def handle_users():
-    return make_response()
+    token = request.form.get("token")
+    if not token:
+        return make_response(jsonify(APIRETURN.EMPTY), 200)
+
+    if not auth(token):
+        return make_response(jsonify(APIRETURN.UNAUTHORIZED), 401)
+
+    register = request.form.get("register")
+
+    if register:
+        try:
+            register = json.loads(register)
+        except json.JSONDecodeError:
+            return make_response(add(APIRETURN.INVALID, "Expected JSON format style"), 400)
+        
+        if not isinstance(register, dict):
+            return make_response(add(APIRETURN.INVALID, "Expected dict type"), 400)
+
+        name = register.get("name")
+        uid = register.get("uid")
+        permission = register.get("permission")
+
+        if not (name and uid and permission):
+            return make_response(add(APIRETURN.INVALID, "Missing arguments"), 400)
+        
+        response = Register.register(name, uid, permission)
+
+        return make_response(response)
+    
+    return make_response(add(APIRETURN.EMPTY, "Server expected register arguments but get none"), 400)
 
 
 @app.errorhandler(404)
