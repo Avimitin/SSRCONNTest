@@ -97,6 +97,28 @@ def subscriptions_handler():
 
     return make_response(jsonify(ok=True, results=results), 200)
 
+@app.route("/api/v1/subscriptions", methods=["DELETE"])
+def delete_subscriptions():
+    token = request.form.get("token")
+    if not token:
+        return make_response(jsonify(APIRETURN.EMPTY), 200)
+
+    if not TokenAuthorize.auth(token):
+        return make_response(jsonify(APIRETURN.UNAUTHORIZED), 401)
+
+    name = request.form.get("name")
+
+    if not name:
+        return make_response(add(APIRETURN.INVALID, "Expected name but get none"))
+
+    s = SubHandler.SubHandler()
+    result = s.delete_link(name)
+
+    if result["ok"]:
+        return make_response(result)
+    
+    return make_response(jsonify(ok="False", descriptions=result["descriptions"]), 500)
+
 
 @app.route("/api/v1/verification", methods=["POST"])
 def verify():
