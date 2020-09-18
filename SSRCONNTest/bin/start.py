@@ -11,8 +11,29 @@ import time
 from bin.options import OPT
 
 
-def main(debug=False):
-    if not debug and "Linux" not in platform.platform():
+def main(name,
+         paolu=False,
+         debug=False,
+         test_method=None,
+         test_mode=None,
+         confirmation=True,
+         result_color=None,
+         import_file=False,
+         guiConfig=None,
+         url=None,
+         filter=None,
+         group=None,
+         remarks=None,
+         efliter=None,
+         egfilter=None,
+         erfilter=None,
+         sort_method=None,
+         group_override=None,
+         use_ssr_CSharp=False,
+         skip_requirements_check=True,
+         platform_confirm=True):
+
+    if platform_confirm and "Linux" not in platform.platform():
         print("暂时不支持除了 Linux 以外的平台")
         return
 
@@ -31,7 +52,8 @@ def main(debug=False):
     os.system(shell)
     '''
 
-    opt = OPT(name="OxygenProxy", test_mode="pingonly", egfilter=["官网", "如果发现"], filter=["深港专线"], confirmation=True, url=ssr_url)
+    opt = OPT(name, paolu, debug, test_method, test_mode, confirmation, result_color, import_file, guiConfig,
+              url, filter, group, remarks, efliter, egfilter, erfilter, sort_method, group_override, use_ssr_CSharp, skip_requirements_check)
 
     sys.path.append(os.getcwd()+r"\SSRSpeed")
     os.chdir("SSRSpeed")
@@ -121,4 +143,4 @@ def modify_file():
 '''
 
 if __name__ == '__main__':
-    main(debug=True)
+    main(name="OxygenProxy", test_mode="pingonly", egfilter=["官网", "如果发现"], filter=["深港专线01"], confirmation=True, url="https://sub.o-proxy.info/o/FccSbmDQvkIIFSeF?sub=1", platform_confirm=False)
